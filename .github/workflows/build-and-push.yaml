@@ -14,6 +14,11 @@ jobs:
     if: github.ref == 'refs/heads/main'
     environment: development
     steps:
+    - name: Print environment variables
+      run: |
+        echo "Current Environment: ${{ github.environment }}"
+        echo "POSTGRESQL_POSTGRES_PASSWORD is set"
+
     -
       name: Set up QEMU
       # 다중 플랫폼(Docker) 이미지를 빌드할 수 있도록 해준다.
