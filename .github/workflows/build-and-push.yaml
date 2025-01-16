@@ -5,19 +5,65 @@ on:
   push:
     branches: 
       - main
+      - develop
       
 jobs:
   # 개발 환경
   build-and-push-dev:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  
+    if: github.ref == 'refs/heads/main'
     environment: development
     steps:
     - 
-      name: Print environment variables
-      run: |
-        echo "Current Environment: $ENVIRONMENT"
-        echo "POSTGRESQL_POSTGRES_PASSWORD is set : ${{ vars.TZ }}"
+      name: Checkout Repository
+      uses: actions/checkout@v4
+    
+    -
+      name: Set up QEMU
+      # 다중 플랫폼(Docker) 이미지를 빌드할 수 있도록 해준다.
+      uses: docker/setup-qemu-action@v3
 
+    - 
+      name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3  
+      # Docker Buildx를 설정합니다.
+
+    - 
+      name: Login to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}  
+        # GitHub Secret에서 Docker Hub 사용자 이름을 가져옵니다.
+        password: ${{ secrets.DOCKERHUB_TOKEN }}     
+        # GitHub Secret에서 Docker Hub 액세스 토큰을 가져옵니다.
+
+    - 
+      name: Build and Push
+      uses: docker/build-push-action@v6
+      with:
+        # 빌드 컨텍스트 : Dockerfile이 있는 위치
+        context: .
+        # Dockerfile의 경로
+        file: Dockerfile
+        build-args: |
+          PROFILE=${{ vars.PROFILE }}
+        env:
+          POSTGRESQL_POSTGRES_PASSWORD=${{secrets.POSTGRESQL_POSTGRES_PASSWORD}}
+          POSTGRES_DB=${{ secrets.POSTGRES_DB }}
+          POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_USER=${{ secrets.POSTGRES_USER }}
+          TZ=${{ vars.TZ }}
+          
+        push: true  # 이미지를 레지스트리에 푸시합니다.
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/loan-postgres:${{ github.sha }}  
+        platforms: linux/amd64,linux/arm64,linux/arm/v7
+
+  # 운영 환경
+  build-and-push-prod:
+    runs-on: ubuntu-latest  
+    if: github.ref == 'refs/heads/develop'
+    environment: production
+    steps:
     - 
       name: Checkout Repository
       uses: actions/checkout@v4
@@ -43,16 +89,21 @@ jobs:
 
     - 
       name: Build and Push
-      uses: docker/build-push-action@v6
+      uses: docker/build-push-action@v2
       with:
-        # 빌드 컨텍스트 : . 은 레포지토리 ROOT 디렉터리를 의미한다.
+        # 빌드 컨텍스트 : Dockerfile이 있는 위치
         context: .
+        # Dockerfile의 경로
         file: Dockerfile
         build-args: |
           PROFILE=${{ vars.PROFILE }}
         env:
           POSTGRESQL_POSTGRES_PASSWORD=${{ secrets.POSTGRESQL_POSTGRES_PASSWORD }}
+          POSTGRES_DB=${{ secrets.POSTGRES_DB }}
+          POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_USER=${{ secrets.POSTGRES_USER }}
+          TZ=${{ vars.TZ }}
           
         push: true  # 이미지를 레지스트리에 푸시합니다.
-        tags: ${{ secrets.DOCKERHUB_USERNAME }}/loan-postgres:${{ github.sha }}  
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/loan-postgres:${{ github.sha }}          
         platforms: linux/amd64,linux/arm64,linux/arm/v7
