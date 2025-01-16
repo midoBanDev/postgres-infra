@@ -1,18 +1,22 @@
 FROM postgres:13
 
-# 환경 변수 설정
-ENV POSTGRES_USER=loan-user
-ENV POSTGRES_PASSWORD=loan-1234
-ENV POSTGRES_DB=mydb
-ENV TZ=Asia/Seoul
+# 기본 유틸리티 설치
+# apt-get update: 패키지 목록을 최신 상태로 갱신.
+# apt-get install: 필요한 패키지를 설치.
+# rm -rf /var/lib/apt/lists/*: 패키지 설치 후 더 이상 필요 없는 캐시를 삭제.
+RUN apt-get update && apt-get install -y \
+    iputils-ping \
+    net-tools \
+    curl \
+    vim \
+    && rm -rf /var/lib/apt/lists/*
 
 # 환경별 변수
-ARG ENV=dev
-
+ARG PROFILE=local
 
 # 설정 파일 복사
-COPY ./config/custom.${ENV}.conf /etc/postgresql/custom.conf
-# conf.d에 있는 파일이 custom.conf에 include 되어 있기 때문에 경로 맞춰주어야 한다.
+COPY ./config/custom.${PROFILE}.conf /etc/postgresql/custom.conf
+# conf.d에 있는 파일이 custom.conf에 include 되어 있기 때문에 파일 복사 이후 컨테이너 내부 경로도 문제가 없도록 맞춰주어야 한다.
 COPY ./config/conf.d/ /etc/postgresql/conf.d/
 
 
