@@ -12,10 +12,15 @@ jobs:
     runs-on: ubuntu-latest
     environment: development
     steps:
-    - name: Print environment variables
+    - 
+      name: Print environment variables
       run: |
-        echo "Current Environment: ${{ github.environment }}"
+        echo "Current Environment: $ENVIRONMENT"
         echo "POSTGRESQL_POSTGRES_PASSWORD is set : ${{ vars.TZ }}"
+
+    - 
+      name: Checkout Repository
+      uses: actions/checkout@v4
 
     -
       name: Set up QEMU
@@ -41,12 +46,12 @@ jobs:
       uses: docker/build-push-action@v6
       with:
         # 빌드 컨텍스트 : . 은 레포지토리 ROOT 디렉터리를 의미한다.
-        context: ./
-        file: ./Dockerfile
+        context: .
+        file: Dockerfile
         build-args: |
           PROFILE=${{ vars.PROFILE }}
         env:
-          POSTGRESQL_POSTGRES_PASSWORD=${{ secrets.POSTGRESQL_POSTGRES_PASSWORD  || 'default-value' }}
+          POSTGRESQL_POSTGRES_PASSWORD=${{ secrets.POSTGRESQL_POSTGRES_PASSWORD }}
           
         push: true  # 이미지를 레지스트리에 푸시합니다.
         tags: ${{ secrets.DOCKERHUB_USERNAME }}/loan-postgres:${{ github.sha }}  
