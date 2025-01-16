@@ -15,7 +15,7 @@ jobs:
     - name: Print environment variables
       run: |
         echo "Current Environment: ${{ github.environment }}"
-        echo "POSTGRESQL_POSTGRES_PASSWORD is set : ${{ var.TZ }}"
+        echo "POSTGRESQL_POSTGRES_PASSWORD is set : ${{ vars.TZ }}"
 
     -
       name: Set up QEMU
