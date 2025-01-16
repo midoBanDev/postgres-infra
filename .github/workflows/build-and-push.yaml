@@ -44,11 +44,11 @@ jobs:
         build-args: |
           PROFILE=${vars.PROFILE}
         env:
-          POSTGRESQL_POSTGRES_PASSWORD: ${{secrets.POSTGRESQL_POSTGRES_PASSWORD}}
-          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-          TZ: ${{ vars.TZ }}
+          POSTGRESQL_POSTGRES_PASSWORD=${{secrets.POSTGRESQL_POSTGRES_PASSWORD}}
+          POSTGRES_DB=${{ secrets.POSTGRES_DB }}
+          POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_USER=${{ secrets.POSTGRES_USER }}
+          TZ=${{ vars.TZ }}
           
         push: true  # 이미지를 레지스트리에 푸시합니다.
         tags: ${{ secrets.DOCKERHUB_USERNAME }}/loan-postgres:${{ github.sha }}  
@@ -90,11 +90,11 @@ jobs:
         build-args: |
           PROFILE=${vars.PROFILE}
         env:
-          POSTGRESQL_POSTGRES_PASSWORD: ${{secrets.POSTGRESQL_POSTGRES_PASSWORD}}
-          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-          TZ: ${{ vars.TZ }}
+          POSTGRESQL_POSTGRES_PASSWORD=${{secrets.POSTGRESQL_POSTGRES_PASSWORD}}
+          POSTGRES_DB=${{ secrets.POSTGRES_DB }}
+          POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_USER=${{ secrets.POSTGRES_USER }}
+          TZ=${{ vars.TZ }}
           
         push: true  # 이미지를 레지스트리에 푸시합니다.
         tags: ${{ secrets.DOCKERHUB_USERNAME }}/loan-postgres:${{ github.sha }}          
