@@ -17,7 +17,7 @@ jobs:
     - name: Print environment variables
       run: |
         echo "Current Environment: ${{ github.environment }}"
-        echo "POSTGRESQL_POSTGRES_PASSWORD is set"
+        echo "POSTGRESQL_POSTGRES_PASSWORD is set : ${{ secrets.POSTGRESQL_POSTGRES_PASSWORD }}"
 
     -
       name: Set up QEMU
@@ -48,7 +48,7 @@ jobs:
         build-args: |
           PROFILE=${{ vars.PROFILE }}
         env:
-          POSTGRESQL_POSTGRES_PASSWORD: ${{ secrets.POSTGRESQL_POSTGRES_PASSWORD  || 'default-value' }}
+          POSTGRESQL_POSTGRES_PASSWORD=${{ secrets.POSTGRESQL_POSTGRES_PASSWORD  || 'default-value' }}
           
         push: true  # 이미지를 레지스트리에 푸시합니다.
         tags: ${{ secrets.DOCKERHUB_USERNAME }}/loan-postgres:${{ github.sha }}  
