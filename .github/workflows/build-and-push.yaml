@@ -47,7 +47,6 @@ jobs:
         file: Dockerfile
         build-args: |
           PROFILE=${{ vars.PROFILE }}
-        env:
           POSTGRESQL_POSTGRES_PASSWORD=${{secrets.POSTGRESQL_POSTGRES_PASSWORD}}
           POSTGRES_DB=${{ secrets.POSTGRES_DB }}
           POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
@@ -97,7 +96,6 @@ jobs:
         file: Dockerfile
         build-args: |
           PROFILE=${{ vars.PROFILE }}
-        env:
           POSTGRESQL_POSTGRES_PASSWORD=${{ secrets.POSTGRESQL_POSTGRES_PASSWORD }}
           POSTGRES_DB=${{ secrets.POSTGRES_DB }}
           POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
