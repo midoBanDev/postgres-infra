@@ -5,13 +5,13 @@ on:
   push:
     branches: 
       - main
-      - develop
+      - dev
       
 jobs:
   # 개발 환경
   build-and-push-dev:
     runs-on: ubuntu-latest  
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/dev'
     environment: development
     steps:
     - 
@@ -61,7 +61,7 @@ jobs:
   # 운영 환경
   build-and-push-prod:
     runs-on: ubuntu-latest  
-    if: github.ref == 'refs/heads/develop'
+    if: github.ref == 'refs/heads/main'
     environment: production
     steps:
     - 

@@ -12,6 +12,12 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # 환경별 변수
+ENV POSTGRESQL_POSTGRES_PASSWORD
+ENV POSTGRES_DB
+ENV POSTGRES_PASSWORD
+ENV POSTGRES_USER
+ENV TZ
+
 ARG PROFILE=local
 
 # 설정 파일 복사
