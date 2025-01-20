@@ -11,17 +11,13 @@ jobs:
   # 개발 환경
   build-and-push-dev:
     runs-on: ubuntu-latest  
-    if: github.ref == 'refs/heads/dev'
+    #if: github.ref == 'refs/heads/dev'
+    if: 1 == 2
     environment: development
     steps:
     - 
       name: Checkout Repository
       uses: actions/checkout@v4
-    
-    -
-      name: Set up QEMU
-      # 다중 플랫폼(Docker) 이미지를 빌드할 수 있도록 해준다.
-      uses: docker/setup-qemu-action@v3
 
     - 
       name: Set up Docker Buildx
@@ -54,8 +50,7 @@ jobs:
           TZ=${{ vars.TZ }}
           
         push: true  # 이미지를 레지스트리에 푸시합니다.
-        tags: ${{ secrets.DOCKERHUB_USERNAME }}/loan-postgres:${{ github.sha }}  
-        platforms: linux/amd64,linux/arm64,linux/arm/v7
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/loan-postgres-dev:${{ github.sha }}  
 
   # 운영 환경
   build-and-push-prod:
@@ -66,11 +61,6 @@ jobs:
     - 
       name: Checkout Repository
       uses: actions/checkout@v4
-
-    -
-      name: Set up QEMU
-      # 다중 플랫폼(Docker) 이미지를 빌드할 수 있도록 해준다.
-      uses: docker/setup-qemu-action@v3
 
     - 
       name: Set up Docker Buildx
@@ -103,5 +93,4 @@ jobs:
           TZ=${{ vars.TZ }}
           
         push: true  # 이미지를 레지스트리에 푸시합니다.
-        tags: ${{ secrets.DOCKERHUB_USERNAME }}/loan-postgres:${{ github.sha }}          
-        platforms: linux/amd64,linux/arm64,linux/arm/v7
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/loan-postgres-prod:${{ github.sha }}          
