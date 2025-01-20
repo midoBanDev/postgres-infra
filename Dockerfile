@@ -12,7 +12,6 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # 환경별 변수
-
 ARG POSTGRESQL_POSTGRES_PASSWORD
 ARG POSTGRES_DB
 ARG POSTGRES_PASSWORD
